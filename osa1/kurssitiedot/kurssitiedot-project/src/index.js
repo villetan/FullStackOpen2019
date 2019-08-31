@@ -16,10 +16,10 @@ const Part = (props) => {
 }
 
 const Content = (props) => {
-  const parts = props.ps.map(x => <Part part={x.name} exercises={x.exercises} />)
+  const parts_html = props.ps.map(x => <Part part={x.name} exercises={x.exercises} />)
   return(
     <div>
-      {parts}
+      {parts_html}
     </div>
   )
 }
@@ -32,8 +32,9 @@ const Total = (props) => {
 }
 
 const App = () => {
-  const course = 'Half Stack application development'
-  const parts = [
+  const course = {
+    name: 'Half Stack application development',
+    parts: [
       {
         name: 'Fundamentals of React',
         exercises: 10
@@ -46,12 +47,13 @@ const App = () => {
         name: 'State of a component',
         exercises: 14
       }
-  ]
+    ]
+  }
   return (
     <div>
-      <Header course={course}/>
-      <Content ps={parts}/>
-      <Total ps={parts}/>
+      <Header course={course.name}/>
+      <Content ps={course.parts}/>
+      <Total ps={course.parts}/>
     </div>
   )
 }
