@@ -13,14 +13,23 @@ const getRandomInt = (max) => {
 
 const App = (props) => {
   const [selected, setSelected] = useState(getRandomInt(props.anecdotes.length))
+  const [votes, setVotes] = useState(new Uint8Array(props.anecdotes.length))
 
   const handleNext = () => {
     setSelected(getRandomInt(props.anecdotes.length))
   }
+  const handleVote = () => {
+    const votes_cp = { ...votes }
+    votes_cp[selected] += 1
+    setVotes(votes_cp)
+  }
+
   return (
     <div>
       {props.anecdotes[selected]}
       <br />
+      <p>has {votes[selected]} votes </p>
+      <Button onClick={handleVote} text="vote" />
       <Button onClick={handleNext} text="next anecdote" />
     </div>
   )
