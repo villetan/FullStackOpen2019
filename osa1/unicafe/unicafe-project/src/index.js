@@ -7,19 +7,25 @@ const Button = ({onClick, text}) => (
   <button onClick={onClick}>{text}</button>
 )
 
+const Stat = ({text, value, unit}) => {
+  return(
+    <p>{text} {value} {unit}</p>
+  )
+}
+
 const Stats = ({good, neutral, bad}) => {
-  debugger
   const total = bad + neutral + good
   const avg = (bad * (-1) + neutral * 0 + good * 1) / total
   const good_per = good / total
+  if(total === 0) return(<p>No feedback given</p>)
   return (
     <div>
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <p>all {total}</p>
-      <p>average {avg}</p>
-      <p>positive {good_per * 100.0} %</p>
+      <Stat text="good" value={good}/>
+      <Stat text="neutral" value={neutral}/>
+      <Stat text="bad" value={bad}/>
+      <Stat text="all" value={total}/>
+      <Stat text="average" value={avg}/>
+      <Stat text="positive" value={good_per * 100} unit="%"/>
     </div>
   )
 }
