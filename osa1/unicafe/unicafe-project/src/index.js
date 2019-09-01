@@ -8,11 +8,18 @@ const Button = ({onClick, text}) => (
 )
 
 const Stats = ({good, neutral, bad}) => {
+  debugger
+  const total = bad + neutral + good
+  const avg = (bad * (-1) + neutral * 0 + good * 1) / total
+  const good_per = good / total
   return (
     <div>
       <p>good {good}</p>
       <p>neutral {neutral}</p>
       <p>bad {bad}</p>
+      <p>all {total}</p>
+      <p>average {avg}</p>
+      <p>positive {good_per * 100.0} %</p>
     </div>
   )
 }
