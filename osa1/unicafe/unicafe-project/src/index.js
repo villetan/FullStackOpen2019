@@ -9,7 +9,10 @@ const Button = ({onClick, text}) => (
 
 const Stat = ({text, value, unit}) => {
   return(
-    <p>{text} {value} {unit}</p>
+    <tr>
+      <td>{text}</td>
+      <td>{value} {unit}</td>
+    </tr>
   )
 }
 
@@ -19,14 +22,16 @@ const Stats = ({good, neutral, bad}) => {
   const good_per = good / total
   if(total === 0) return(<p>No feedback given</p>)
   return (
-    <div>
-      <Stat text="good" value={good}/>
-      <Stat text="neutral" value={neutral}/>
-      <Stat text="bad" value={bad}/>
-      <Stat text="all" value={total}/>
-      <Stat text="average" value={avg}/>
-      <Stat text="positive" value={good_per * 100} unit="%"/>
-    </div>
+    <table>
+      <tbody>
+        <Stat text="good" value={good}/>
+        <Stat text="neutral" value={neutral}/>
+        <Stat text="bad" value={bad}/>
+        <Stat text="all" value={total}/>
+        <Stat text="average" value={avg}/>
+        <Stat text="positive" value={good_per * 100} unit="%"/>
+      </tbody>
+    </table>
   )
 }
 
