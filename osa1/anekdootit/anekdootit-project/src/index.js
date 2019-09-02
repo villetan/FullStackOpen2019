@@ -11,6 +11,11 @@ const getRandomInt = (max) => {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
+const argMax = (array) => {
+  const amax = array.map((x, i) => [x, i]).reduce((r, a) => (a[0] > r[0] ? a : r))[1];
+  return amax ? amax : 0
+}
+
 const App = (props) => {
   const [selected, setSelected] = useState(getRandomInt(props.anecdotes.length))
   const [votes, setVotes] = useState(new Uint8Array(props.anecdotes.length))
@@ -19,19 +24,28 @@ const App = (props) => {
     setSelected(getRandomInt(props.anecdotes.length))
   }
   const handleVote = () => {
-    const votes_cp = { ...votes }
+    const votes_cp = [ ...votes ]
     votes_cp[selected] += 1
     setVotes(votes_cp)
   }
-
   return (
-    <div>
-      {props.anecdotes[selected]}
-      <br />
-      <p>has {votes[selected]} votes </p>
-      <Button onClick={handleVote} text="vote" />
-      <Button onClick={handleNext} text="next anecdote" />
-    </div>
+    <>
+      <div>
+        <h1>Anecdote of the day</h1>
+        {props.anecdotes[selected]}
+        <br />
+        <p>has {votes[selected]} votes </p>
+        <Button onClick={handleVote} text="vote" />
+        <Button onClick={handleNext} text="next anecdote" />
+      </div>
+      <div>
+        <h1>Anecdote with the most votes</h1>
+        <p>{props.anecdotes[argMax(votes)]}
+          <br />
+          has {votes[argMax(votes)]} votes.
+        </p>
+      </div>
+    </>
   )
 }
 
