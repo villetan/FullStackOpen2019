@@ -13,6 +13,48 @@ const Contact = ({name, number}) => {
   )
 }
 
+  const handleInputChange = (inputChangeFun) => {
+    return (
+      (event) => {
+        inputChangeFun(event.target.value)
+      }
+    )
+  }
+
+const Filter = ({filter, setFilterFun}) => {
+  return(
+    <div>
+      filter shown with
+      <input
+            value={filter}
+            onChange={handleInputChange(setFilterFun)}
+      />
+    </div>
+  )
+}
+
+const PersonForm = ({submitFun, newName, newNameFun, newNumber, newNumberFun}) => {
+  return(
+<form onSubmit={submitFun}>
+  <div>
+    name:
+    <input
+      value={newName}
+      onChange={handleInputChange(newNameFun)}
+    />
+    phone:
+    <input
+      value={newNumber}
+      onChange={handleInputChange(newNumberFun)}
+    />
+  </div>
+  <div>
+    <button type="submit">add</button>
+  </div>
+</form>
+  )
+}
+
 const App = () => {
     const [persons, setPersons] = useState([
     { name: 'Arto Hellas', number: '040-123456' },
@@ -41,42 +83,21 @@ const App = () => {
   }
   const personsToShow = filter === "" ? persons : persons.filter(pp => pp.name.toLowerCase().startsWith(filter.toLowerCase()))
 
-  const handleInputChange = (inputChangeFun, field) => {
-    return (
-      (event) => {
-        inputChangeFun(event.target.value)
-      }
-    )
-  }
+
 
   return (
     <div>
     <h2>Phonebook</h2>
-    filter shown with
-      <input
-            value={filter}
-            onChange={handleInputChange(setFilter)}
-      />
-      <h2>add a new contact</h2>
-      <form onSubmit={handleAdd}>
-        <div>
-          name:
-          <input
-            value={newName}
-            onChange={handleInputChange(setNewName)}
-            />
-          phone:
-          <input
-            value={newNumber}
-            onChange={handleInputChange(setNewNumber)}
-            />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      <Contacts contacts={personsToShow} />
+    <Filter filter={filter} setFilterFun={setFilter} />
+    <h2>add a new contact</h2>
+    <PersonForm submitFun={handleAdd}
+                newName={newName}
+                newNameFun={setNewName}
+                newNumber={newNumber}
+                newNumberFun={setNewNumber}
+    />
+    <h2>Numbers</h2>
+    <Contacts contacts={personsToShow} />
     </div>
   )
 
