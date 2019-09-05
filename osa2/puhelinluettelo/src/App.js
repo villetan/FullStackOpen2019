@@ -22,23 +22,26 @@ const App = () => {
   ])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [filter, setFilter] = useState('')
 
   const handleAdd = (event) => {
     event.preventDefault()
     const person_object = {
       name: newName,
-      phoneNumber: newNumber
+      number: newNumber
     }
     if (persons.map(x => x.name).includes(newName)) {
       window.alert(`${newName} is already added to the phonebook`)
     } else {
       setPersons(persons.concat(person_object))
       setNewName("")
+      setNewNumber("")
     }
 
   }
+  const personsToShow = filter === "" ? persons : persons.filter(pp => pp.name.toLowerCase().startsWith(filter.toLowerCase()))
 
-  const handleInputChange = (inputChangeFun) => {
+  const handleInputChange = (inputChangeFun, field) => {
     return (
       (event) => {
         inputChangeFun(event.target.value)
@@ -48,7 +51,13 @@ const App = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
+    <h2>Phonebook</h2>
+    filter shown with
+      <input
+            value={filter}
+            onChange={handleInputChange(setFilter)}
+      />
+      <h2>add a new contact</h2>
       <form onSubmit={handleAdd}>
         <div>
           name:
@@ -67,7 +76,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      <Contacts contacts={persons} />
+      <Contacts contacts={personsToShow} />
     </div>
   )
 
