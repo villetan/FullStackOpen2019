@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import logo from './logo.svg';
 import './App.css';
+import getWeatherKey from './getWeatherKey'
 
 const Search = ({value, onChange}) => {
   return(
@@ -29,7 +30,7 @@ const ListCountry = ({country, clickFun}) => {
   )
 }
 
-const CountryList = ({countries, clickFun}) => {
+const CountryList = ({countries, clickFun, setWeather}) => {
   if(countries.length > 10){
     return(
       <div>Too many mathces, specify another filter</div>
@@ -44,6 +45,18 @@ const CountryList = ({countries, clickFun}) => {
     )
   }else if(countries.length == 1){
     const country = countries[0]
+    const wkey = getWeatherKey()
+    const weatherURL = `http://api.weatherstack.com/current?access_key=${wkey}&query=${country.capital}`
+    const xhttp = new XMLHttpRequest()
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        const data = JSON.parse(this.responseText)
+        setWeather(data.current)
+      }
+    }
+    xhttp.open('GET', weatherURL, true)
+    xhttp.send()
+    
     return(
       <div>
         <h1>{country.name}</h1>
@@ -66,9 +79,23 @@ const CountryList = ({countries, clickFun}) => {
   )
 }
 
+const Weather = ({weather}) => {
+  if(weather.temperature){
+    return(
+      <div>
+        Temperature: {weather.temperature}
+      </div>
+    )
+  }
+  return(
+    <></>
+  )
+}
+
 function App() {
   const [countries, setCountries] = useState([])
   const [countryName, setCountryName] = useState("")
+  const [weather, setWeather] = useState({})
   
   const handleFilter = (event) => {
     setCountryName(event.target.value)
@@ -92,7 +119,8 @@ function App() {
   return(
     <>
       <Search onChange={handleFilter} value={countryName} />
-      <CountryList countries={countries} clickFun={handleButtonClick}/>
+      <CountryList countries={countries} clickFun={handleButtonClick} setWeather={setWeather}/>
+      <Weather weather={weather} />
     </>
   )
 }
